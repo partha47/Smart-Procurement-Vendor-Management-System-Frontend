@@ -1,0 +1,64 @@
+.container{
+  padding:99px;
+  width: 70vh;
+  height: 80vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h2{
+  margin-bottom:80px;
+  color:#333;
+}
+
+form{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+input, select{
+  padding:8px;
+  border:1px solid #ccc;
+  border-radius:4px;
+}
+
+button{
+  padding:8px 15px;
+  border:none;
+  background:#3b9702;
+  color:white;
+  border-radius:4px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#52d065;
+}
+
+table{
+  border-collapse:collapse;
+  width:100%;
+}
+
+table th{
+  background:#38a31d;
+  color:white;
+}
+
+table th, table td{
+  padding:10px;
+  border:1px solid #ddd;
+  text-align:center;
+}
+
+.action-btn{
+  margin-right:5px;
+}
+
+.delete-btn{
+  background:#c33f3f;
+}
+
+.delete-btn:hover{
+  background:#9a2424;
+}

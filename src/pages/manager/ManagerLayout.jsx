@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "./managerdashboard.css";
+// import "./managerdashboard.css";
 
 export default function ManagerLayout({ children }) {
   return (

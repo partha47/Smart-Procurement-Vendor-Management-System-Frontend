@@ -1,13 +1,19 @@
-
-
-
-
-
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 
-export default function ApprovedRequests() {
+import {
+  Box,
+  Typography,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Chip,
+} from "@mui/material";
 
+export default function ApprovedRequests() {
   const [approvals, setApprovals] = useState([]);
 
   useEffect(() => {
@@ -17,27 +23,59 @@ export default function ApprovedRequests() {
   const load = async () => {
     const res = await api.get("/approvals");
     setApprovals(res.data);
+    console.log(res.data); 
   };
 
   return (
-    <div>
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h5" gutterBottom>
+        Approved Requests
+      </Typography>
 
-      <h2>Approved Requests</h2>
+      <Paper sx={{ p: 2 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell><b>ID</b></TableCell>
+              <TableCell><b>Approved Date</b></TableCell>
+              <TableCell><b>Item</b></TableCell>
+              <TableCell><b>Status</b></TableCell>
+              <TableCell><b>Remarks</b></TableCell>
+             
+            </TableRow>
+          </TableHead>
 
-      {approvals
-        .filter(a => a.status === "APPROVED")
-        .map(a => (
+          <TableBody>
+            {approvals
+              .filter((a) => a.decision === "APPROVED")
+              .map((a) => (
+                <TableRow key={a.id}>
+                  <TableCell>{a.id}</TableCell>
+                  <TableCell>
+                    {a.approvedDate ? new Date(a.approvedDate).toLocaleDateString() : "N/A"}
+                  </TableCell>
 
-          <div key={a.id} className="request-card">
+                  <TableCell>
+                    {a.requisition.item.itemName|| "N/A"}
+                  </TableCell>
 
-            <p><b>Approval ID:</b> {a.id}</p>
-            <p><b>Status:</b> {a.status}</p>
-            <p><b>Remarks:</b> {a.remarks}</p>
+                  <TableCell>
+                    <Chip
+                      label={a.decision}
+                      color="success"
+                      size="small"
+                    />
+                  </TableCell>
 
-          </div>
-
-        ))}
-
-    </div>
+                  <TableCell>
+                    {a.remarks || "No remarks"}
+                  </TableCell>
+                  
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    </Box>
   );
 }

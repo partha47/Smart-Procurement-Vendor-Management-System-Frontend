@@ -1,14 +1,18 @@
-
-
-
-
-
-
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 
-export default function PendingApprovals() {
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Grid,
+  Button,
+  Chip,
+  Stack,
+} from "@mui/material";
 
+export default function PendingApprovals() {
   const [list, setList] = useState([]);
 
   useEffect(() => {
@@ -21,11 +25,10 @@ export default function PendingApprovals() {
   };
 
   const approve = async (id) => {
-
     await api.post(`/approvals/${id}`, {
       managerId: 2,
       status: "APPROVED",
-      remarks: "Approved by manager"
+      remarks: "Approved by manager",
     });
 
     alert("Approved Successfully");
@@ -33,31 +36,54 @@ export default function PendingApprovals() {
   };
 
   return (
-    <div>
+    <Box sx={{ p: 2 }}>
+  
+      <Typography variant="h5" gutterBottom>
+        Pending Approvals
+      </Typography>
 
-      <h2>Pending Approvals</h2>
+  
+      <Grid container spacing={2}>
+        {list
+          .filter((r) => r.status === "PENDING")
+          .map((r) => (
+            <Grid item xs={12} md={6} lg={4} key={r.id}>
+              <Card elevation={3}>
+                <CardContent>
 
-      {list
-        .filter(r => r.status === "PENDING")
-        .map(r => (
+                  <Typography variant="h6" gutterBottom>
+                    Request ID: {r.id}
+                  </Typography>
 
-          <div key={r.id} className="request-card">
+                  <Typography>
+                    <b>Item:</b> {r.item?.itemName || "N/A"}
+                  </Typography>
 
-            <p><b>ID:</b> {r.id}</p>
-            <p><b>Item:</b> {r.item?.itemName}</p>
-            <p><b>Quantity:</b> {r.quantity}</p>
-            <p><b>Status:</b> {r.status}</p>
+                  <Typography>
+                    <b>Quantity:</b> {r.quantity}
+                  </Typography>
 
-            <button
-              className="approve-btn"
-              onClick={() => approve(r.id)}
-            >
-              Approve
-            </button>
+                  <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+                    <Typography><b>Status:</b></Typography>
+                    <Chip label={r.status} color="warning" size="small" />
+                  </Stack>
 
-          </div>
+                
+                  <Button
+                    variant="contained"
+                    color="success"
+                    fullWidth
+                    sx={{ mt: 2 }}
+                    onClick={() => approve(r.id)}
+                  >
+                    Approve
+                  </Button>
 
-        ))}
-    </div>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+      </Grid>
+    </Box>
   );
 }

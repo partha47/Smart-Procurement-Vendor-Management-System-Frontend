@@ -1,4 +1,4 @@
-.user-container{
+ .user-container{
   padding:99px;
   max-width:1000vh;
   height: 99vh;
@@ -92,4 +92,4 @@
 .status-inactive{
   color:red;
   font-weight:bold;
-}
+} 

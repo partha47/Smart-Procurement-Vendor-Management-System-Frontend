@@ -69,20 +69,41 @@ export default function Items() {
     } catch (err) { showMsg("Delete operation failed", "error"); }
   };
 
-  const getById = async (id) => {
+  // const getById = async (id) => {
+  // try {
+  //   const res = await api.get(`/items/${id}`);
+  //   console.log("Fetched item details:", res.data);
+  //   setForm({
+  //     itemName: res.data.itemName,
+  //     category: res.data.category,
+  //     price: res.data.price
+  //   });
+  //   setEditId(id);
+  //   window.scrollTo({ top: 0, behavior: 'smooth' });
+  //   showMsg("Editing item...");
+  // } catch (err) {
+  //   console.error("Fetch failed", err);
+  //   showMsg("Could not load item details", "error");
+  // }
+// };
+
+const getById = async (id) => {
   try {
     const res = await api.get(`/items/${id}`);
+    console.log("Fetched item details:", res.data);
+    
     setForm({
       itemName: res.data.itemName,
       category: res.data.category,
       price: res.data.price
     });
+    
     setEditId(id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     showMsg("Editing item...");
   } catch (err) {
     console.error("Fetch failed", err);
-    showMsg("Could not load item details", "error");
+    showMsg("Could not load item details. Does the ID exist?", "error");
   }
 };
 
@@ -90,15 +111,27 @@ export default function Items() {
     <Box sx={{ bgcolor: "#f4f7f6", minHeight: "100vh", py: 4 }}>
       <Container maxWidth="lg">
         
-        <Box sx={{ mb: 4, textAlign: 'center' }}>
-          <Typography variant="h4" sx={{ fontWeight: 800, color: "#333", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-            <InventoryIcon sx={{ fontSize: 40, color: "#43a047" }} />
-            Items Management
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Maintain your master inventory list and pricing
-          </Typography>
-        </Box>
+      
+<Paper 
+  elevation={0} 
+  sx={{ 
+    p: 4, 
+    mb: 4, 
+    textAlign: 'center', 
+    borderRadius: "12px", 
+    border: "1px solid #e0e0e0",
+    background: "linear-gradient(to right, #ffffff, #f8f9fa)", 
+    borderLeft: "6px solid #1565c0" 
+  }}
+>
+  <Typography variant="h4" sx={{ fontWeight: 800, color: "#1a237e", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+    <InventoryIcon sx={{ fontSize: 40, color: "#1565c0" }} />
+    Items Management
+  </Typography>
+  <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+    Maintain your master inventory list and pricing
+  </Typography>
+</Paper>
 
         <Paper elevation={0} sx={{ p: 3, mb: 4, border: "1px solid #e0e0e0", borderRadius: "12px" }}>
           <form onSubmit={save}>
@@ -168,7 +201,7 @@ export default function Items() {
           <Table>
             <TableHead 
               sx={{ 
-                bgcolor: "#43a047", 
+                bgcolor: "#1565c0", 
                 "& .MuiTableCell-head": { 
                   color: "white", 
                   fontWeight: "bold", 
@@ -198,7 +231,7 @@ export default function Items() {
                     <Stack direction="row" spacing={1} justifyContent="center">
                       <Button 
                         variant="contained" size="small" 
-                        sx={{ bgcolor: "#1976d2", minWidth: "80px", fontSize: '0.75rem' }}
+                        sx={{ bgcolor: "#43a047", minWidth: "80px", fontSize: '0.75rem' }}
                         onClick={() => getById(i.id)}
                       >
                         EDIT

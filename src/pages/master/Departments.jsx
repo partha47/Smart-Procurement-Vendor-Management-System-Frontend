@@ -16,13 +16,14 @@ import {
   TableBody,
   Stack,
   Snackbar,
-   Dialog,
-   DialogTitle,
-    DialogContent,
-    DialogContentText,
-    DialogActions,
-    Alert,
-
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Alert,
+  Container,
+  Grid
 } from "@mui/material";
 
 import EditIcon from '@mui/icons-material/Edit';
@@ -32,7 +33,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import BusinessIcon from '@mui/icons-material/Business';
 
 export default function Departments() {
-const [departments, setDepartments] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [searchId, setSearchId] = useState("");
@@ -79,8 +80,6 @@ const [departments, setDepartments] = useState([]);
         name: selectedDept.name,
         location: selectedDept.location,
       });
-      // console.log("updated Response:" ,res);
-      // console.log("Update location:", selectedDept.location);
       setOpenEdit(false);
       load();
       showMsg("Department updated successfully");
@@ -88,118 +87,133 @@ const [departments, setDepartments] = useState([]);
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
-          <Typography variant="h4" sx={{ fontWeight: 800, color: "#333", display: 'inline-flex', alignItems: 'center', gap: 2 }}>
-            <BusinessIcon sx={{ fontSize: 40, color: "#3f51b5" }} />
+    <Box sx={{ bgcolor: "#f4f7f6", minHeight: "100vh", py: 4 }}>
+      <Container maxWidth="lg">
+        
+      
+        <Paper 
+          elevation={0} 
+          sx={{ 
+            p: 4, mb: 4, textAlign: 'center', borderRadius: "16px", border: "1px solid #e0e0e0",
+            background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+            borderLeft: "8px solid #3f51b5" 
+          }}
+        >
+          <Typography variant="h4" sx={{ fontWeight: 800, color: "#1a237e", display: 'inline-flex', alignItems: 'center', gap: 2 }}>
+            <BusinessIcon sx={{ fontSize: 45, color: "#3f51b5" }} />
             Department Management
           </Typography>
-          <Typography variant="body1" color="text.secondary">
+          <Typography variant="body1" color="text.secondary" sx={{ mt: 1, fontWeight: 500 }}>
             Organize and track company infrastructure and office locations
           </Typography>
-        </Box>
+        </Paper>
 
-      
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <form onSubmit={submit}>
-          <Stack direction="row" spacing={2}>
-            <TextField
-              label="Department Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              fullWidth
-              required
-            />
+        <Grid container spacing={3}>
+        
+          <Grid item xs={12} md={7}>
+            <Paper elevation={0} sx={{ p: 3, borderRadius: "12px", border: "1px solid #e0e0e0", height: '100%' }}>
+              <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold", color: "#3f51b5" }}>Add New Department</Typography>
+              <form onSubmit={submit}>
+                <Stack direction="row" spacing={2}>
+                  <TextField
+                    label="Department Name" size="small" fullWidth required
+                    value={name} onChange={(e) => setName(e.target.value)}
+                  />
+                  <TextField
+                    label="Location" size="small" fullWidth required
+                    value={location} onChange={(e) => setLocation(e.target.value)}
+                  />
+                  <Button type="submit" variant="contained" sx={{ px: 4, bgcolor: '#3f51b5', fontWeight: 'bold' }}>
+                    ADD
+                  </Button>
+                </Stack>
+              </form>
+            </Paper>
+          </Grid>
 
-            <TextField
-              label="Location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              fullWidth
-              required
-            />
+        
+          <Grid item xs={12} md={5}>
+            <Paper elevation={0} sx={{ p: 3, borderRadius: "12px", border: "1px solid #e0e0e0", height: '100%' }}>
+              <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold", color: "#666" }}>Quick Search</Typography>
+              <Stack direction="row" spacing={1}>
+                <TextField
+                  label="Search ID" size="small" fullWidth
+                  value={searchId} onChange={(e) => setSearchId(e.target.value)}
+                />
+                <Button 
+                  variant="contained" color="inherit" 
+                  onClick={async () => {
+                    if(!searchId) return load();
+                    try { const res = await API.get(`/departments/${searchId}`); setDepartments(res.data ? [res.data] : []); } catch { setDepartments([]); }
+                  }}
+                >
+                  <SearchIcon />
+                </Button>
+                <Button variant="outlined" onClick={() => {setSearchId(""); load();}}>
+                  <RestartAltIcon />
+                </Button>
+              </Stack>
+            </Paper>
+          </Grid>
 
-            <Button type="submit" variant="contained">
-              Add
-            </Button>
-          </Stack>
-        </form>
-      </Paper>
+          
+          <Grid item xs={12}>
+            <Paper elevation={0} sx={{ borderRadius: "12px",mt: 5, display:'flex',ml:25,border: "1px solid #e0e0e0", overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }}>
+              <Box sx={{ overflowX: 'auto' }}>
+                <Table>
+                  <TableHead sx={{ bgcolor: "#3f51b5" }}>
+                    <TableRow>
+                      <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>ID</TableCell>
+                      <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>NAME</TableCell>
+                      <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>LOCATION</TableCell>
+                      <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>ACTIONS</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {departments.length > 0 ? (
+                      departments.map((d) => (
+                        <TableRow key={d.id} hover>
+                          <TableCell sx={{ fontWeight: 600, color: '#777' }}>#{d.id}</TableCell>
+                          <TableCell sx={{ fontWeight: 500 }}>{d.name}</TableCell>
+                          <TableCell>{d.location}</TableCell>
+                          <TableCell align="center">
+                            <Stack direction="row" spacing={1} justifyContent="center">
+                              <IconButton 
+                                onClick={() => { setSelectedDept(d); setOpenEdit(true); }} 
+                                size="small" 
+                                sx={{ color: '#3f51b5', bgcolor: '#f0f2ff', '&:hover': { bgcolor: '#e0e4ff' } }}
+                              >
+                                <EditIcon fontSize="small" /> Edit
+                              </IconButton>
+                              <IconButton 
+                                onClick={() => { setSelectedDept(d); setOpenDelete(true); }} 
+                                size="small" 
+                                sx={{ color: '#d32f2f', bgcolor: '#fff5f5', '&:hover': { bgcolor: '#ffebeb' } }}
+                              >
+                                <DeleteIcon fontSize="small" />Delete
+                              </IconButton>
+                            </Stack>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={4} align="center" sx={{ py: 3, color: 'text.secondary' }}>
+                          No departments found.
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </Box>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
 
-
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Stack direction="row" spacing={2}>
-          <TextField
-            label="Search Department ID"
-            value={searchId}
-            onChange={(e) => setSearchId(e.target.value)}
-            
-          />
-
-          <Button variant="outlined" onClick={async () => {
-                      try { const res = await API.get(`/departments/${searchId}`); setDepartments(res.data ? [res.data] : []); } catch { setDepartments([]); }
-                    }} startIcon={<SearchIcon />}>
-            Search
-          </Button>
-
-          <Button variant="outlined" onClick={load} startIcon={<RestartAltIcon />}>
-            Reset
-          </Button>
-        </Stack>
-      </Paper>
-
-      <Paper sx={{ p: 2 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell><b>ID</b></TableCell>
-              <TableCell><b>Name</b></TableCell>
-              <TableCell><b>Location</b></TableCell>
-              <TableCell><b>Actions</b></TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {departments.map((d) => (
-              <TableRow key={d.id}>
-                <TableCell>{d.id}</TableCell>
-                <TableCell>{d.name}</TableCell>
-                <TableCell>{d.location}</TableCell>
-
-                <TableCell>
-                  <Stack direction="row" spacing={1}>
-                    {/* <Button
-                      variant="contained"
-                      size="small"
-                      onClick={() => updateDept(d.id)}
-                    >
-                      Edit
-                    </Button> */}
-
-                    <IconButton onClick={() => { setSelectedDept(d); setOpenEdit(true); }} size="small" sx={{ color: '#3f51b5' }}><EditIcon fontSize="small" />Edit</IconButton>
-
-                    {/* <Button
-                      variant="contained"
-                      color="error"
-                      size="small"
-                      onClick={() => deleteDept(d.id)}
-                    >
-                      Delete
-                    </Button> */}
-
-                    <IconButton onClick={() => { setSelectedDept(d); setOpenDelete(true); }} size="small" color="error"><DeleteIcon fontSize="small" />Delete</IconButton>
-
-                  </Stack>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-
-
+    
       <Dialog open={openEdit} onClose={() => setOpenEdit(false)} fullWidth maxWidth="xs">
-        <DialogTitle sx={{ fontWeight: 'bold' }}>Update Department</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 'bold', color: '#3f51b5' }}>Update Department</DialogTitle>
         <DialogContent>
           <TextField fullWidth label="Name" value={selectedDept.name} onChange={(e) => setSelectedDept({ ...selectedDept, name: e.target.value })} margin="normal" />
           <TextField fullWidth label="Location" value={selectedDept.location} onChange={(e) => setSelectedDept({ ...selectedDept, location: e.target.value })} margin="normal" />
@@ -209,7 +223,6 @@ const [departments, setDepartments] = useState([]);
           <Button onClick={handleUpdate} variant="contained" sx={{ bgcolor: '#3f51b5' }}>Save Changes</Button>
         </DialogActions>
       </Dialog>
-
 
       <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
         <DialogTitle sx={{ color: '#d32f2f', fontWeight: 'bold' }}>Remove Department?</DialogTitle>
@@ -222,7 +235,8 @@ const [departments, setDepartments] = useState([]);
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={() => setSnackbar({ ...snackbar, open: false })} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+  
+      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={() => setSnackbar({ ...snackbar, open: false })} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <Alert severity={snackbar.severity} variant="filled" sx={{ width: '100%' }}>{snackbar.message}</Alert>
       </Snackbar>
 

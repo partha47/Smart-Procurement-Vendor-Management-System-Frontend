@@ -10,6 +10,7 @@ import {
   Link,
   InputAdornment,
   Snackbar,
+  Button,
   Alert,
 } from "@mui/material";
 
@@ -258,9 +259,20 @@ export default function VendorRegister() {
         />
         
 
-      <button onClick={registerVendor}>
+      <Button
+      fullWidth
+          variant="contained"
+          size="large"
+          sx={{ 
+            mt: 4, 
+            mb: 2, 
+            py: 1.5,
+            fontWeight: "bold",
+            borderRadius: 2,
+            boxShadow: "0 4px 12px rgba(25, 118, 210, 0.3)"}}
+       onClick={registerVendor}>
         Register
-      </button>
+      </Button>
 
     <Box sx={{ textAlign: 'center' }}>
       <SignInLink />

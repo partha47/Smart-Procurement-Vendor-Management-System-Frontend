@@ -96,17 +96,42 @@ export default function Roles() {
       <Container maxWidth="lg"> 
         
 
-        <Box sx={{ mb: 4, textAlign: 'center' }}>
-          <Typography variant="h4" sx={{ fontWeight: 800, color: "#333", display: 'inline-flex', alignItems: 'center', gap: 2 }}>
-            <SecurityIcon sx={{ fontSize: 40, color: "#1976d2" }} />
-            Roles Management
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Securely manage system authority and access groups
-          </Typography>
-        </Box>
+        
+<Paper 
+  elevation={0} 
+  sx={{ 
+    p: 4, 
+    mb: 4, 
+    textAlign: 'center', 
+    borderRadius: "16px", 
+    border: "1px solid #e0e0e0",
+    background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+    borderLeft: "8px solid #1565c0", 
+    position: 'relative',
+    overflow: 'hidden'
+  }}
+>
+  <Typography 
+    variant="h4" 
+    sx={{ 
+      fontWeight: 800, 
+      color: "#1a237e", 
+      display: 'inline-flex', 
+      alignItems: 'center', 
+      gap: 2,
+      position: 'relative',
+      zIndex: 1
+    }}
+  >
+    <SecurityIcon sx={{ fontSize: 45, color: "#1565c0" }} />
+    Roles Management
+  </Typography>
+  <Typography variant="body1" color="text.secondary" sx={{ mt: 1, fontWeight: 500 }}>
+    Securely manage system authority and access groups
+  </Typography>
+</Paper>
 
-        <Grid container spacing={4}>
+        <Grid container spacing={4} >
           <Grid item xs={12} md={4}>
             <Stack spacing={3}>
               <Card elevation={0} sx={{ borderRadius: 3, border: "1px solid #e0e0e0" }}>
@@ -155,8 +180,7 @@ export default function Roles() {
                         </TableCell>
                         <TableCell align="right" sx={{ pr: 2 }}>
                           <Stack direction="row" spacing={1} justifyContent="flex-end">
-                            <IconButton o
-                            nClick={() => { setSelectedRole(r); setOpenEdit(true); }} 
+                            <IconButton onClick={() => { setSelectedRole(r); setOpenEdit(true); }} 
                             size="small" 
                             color="primary">
                               <EditIcon fontSize="small" /></IconButton>

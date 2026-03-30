@@ -76,16 +76,26 @@ export default function VendorApproval() {
     <Box sx={{ bgcolor: "#f4f7f6", minHeight: "100vh", py: 4 }}>
       <Container maxWidth="lg">
         
-
-        <Box sx={{ mb: 4, textAlign: 'center' }}>
-          <Typography variant="h4" sx={{ fontWeight: 800, color: "#333", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-            <HowToRegIcon sx={{ fontSize: 40, color: "#43a047" }} />
+<Paper 
+  elevation={0} 
+  sx={{ 
+    p: 4, 
+    mb: 4, 
+    textAlign: 'center', 
+    borderRadius: "12px", 
+    border: "1px solid #e0e0e0",
+    background: "linear-gradient(to right, #ffffff, #f8f9fa)", 
+    borderLeft: "6px solid #1565c0" 
+  }}
+>
+  <Typography variant="h4" sx={{ fontWeight: 800, color: "#1a237e", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+    <HowToRegIcon sx={{ fontSize: 40, color: "#43a047" }} />
             Vendor Approval
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
+  </Typography>
+  <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
             Verify and manage partnerships with external suppliers
-          </Typography>
-        </Box>
+  </Typography>
+</Paper>
 
         <Paper elevation={0} sx={{ p: 2, mb: 4, border: "1px solid #e0e0e0", borderRadius: "12px" }}>
           <Stack direction="row" spacing={2} alignItems="center">
@@ -94,6 +104,7 @@ export default function VendorApproval() {
               size="small"
               fullWidth
               value={searchId}
+              sx={{ border: "1px solid #000000"}}
               onChange={(e) => setSearchId(e.target.value)}
               InputProps={{
                 startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment>
@@ -121,7 +132,7 @@ export default function VendorApproval() {
           <Table>
             <TableHead 
               sx={{ 
-                bgcolor: "#43a047", 
+                bgcolor: "#136acd", 
                 "& .MuiTableCell-head": { 
                   color: "white", 
                   fontWeight: "bold", 

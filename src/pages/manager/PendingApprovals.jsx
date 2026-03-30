@@ -14,8 +14,24 @@ import {
 
 export default function PendingApprovals() {
   const [list, setList] = useState([]);
+  const [ManagerName, setManagerName] = useState("");
 
   useEffect(() => {
+     const fetchProfile = async () => {
+        try {
+          const userId = localStorage.getItem("userId");
+          if (userId) {
+          
+            const res = await api.get(`/users/${userId}`); 
+            setManagerName(res.data.name || res.data.username);
+          }
+        } catch (err) {
+          console.error("Could not fetch profile", err);
+          setManagerName("Manager");
+        }
+      };
+    
+    fetchProfile();
     load();
   }, []);
 
@@ -26,7 +42,7 @@ export default function PendingApprovals() {
 
   const approve = async (id) => {
     await api.post(`/approvals/${id}`, {
-      managerId: 2,
+      managerName: ManagerName,
       status: "APPROVED",
       remarks: "Approved by manager",
     });

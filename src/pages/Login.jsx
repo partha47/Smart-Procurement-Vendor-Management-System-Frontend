@@ -55,9 +55,10 @@ export default function Login() {
         password: form.password,
       });
 
+      // console.log("Login Response Data:", res.data);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
-
+      localStorage.setItem("userId", res.data.id);
       const role = res.data.role?.toUpperCase();
 
       showSnackbar("Login successful!");

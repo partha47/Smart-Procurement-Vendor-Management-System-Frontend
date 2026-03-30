@@ -70,6 +70,7 @@ export default function AdminDashboard() {
   const procurementItems = [
     { text: "Items", icon: <InventoryIcon />, path: "/admin/items" },
     { text: "Purchase Order", icon: <ShoppingCartIcon />, path: "/admin/PurchaseOrder" },
+    {text: "Inventory",icon:<InventoryIcon/> ,path:"/admin/Inventory"},
     { text: "Vendor Approval", icon: <VerifiedUserIcon />, path: "/admin/VendorApproval" },
   ];
 

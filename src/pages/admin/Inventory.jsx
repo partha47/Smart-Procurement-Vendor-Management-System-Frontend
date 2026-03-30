@@ -5,7 +5,7 @@ import {
   Box, Typography, TextField, Button, Paper, Table, TableHead,
   TableRow, TableCell, TableBody, Select, MenuItem, Stack,
   Container, Grid, IconButton, InputAdornment, Chip, Tooltip,
-  Snackbar, Alert, FormControl, InputLabel
+  Snackbar, Alert, FormControl, InputLabel,Divider 
 } from "@mui/material";
 
 import InventoryIcon from '@mui/icons-material/Inventory';
@@ -23,7 +23,7 @@ export default function Inventory() {
 
   const [form, setForm] = useState({
     quantityAvailable: "",
-    warehouseLocation: "",
+    // warehouseLocation: "",
     itemId: "",
   });
 
@@ -56,7 +56,7 @@ export default function Inventory() {
       } else {
         await api.post("/inventory", {
           quantityAvailable: form.quantityAvailable,
-          warehouseLocation: form.warehouseLocation,
+          // warehouseLocation: form.warehouseLocation,
           item: { id: form.itemId },
         });
         showMsg("Item added to warehouse");
@@ -78,7 +78,7 @@ export default function Inventory() {
     const res = await api.get(`/inventory/${id}`);
     setForm({
       quantityAvailable: res.data.quantityAvailable,
-      warehouseLocation: res.data.warehouseLocation,
+      // warehouseLocation: res.data.warehouseLocation,
       itemId: res.data.item.id,
     });
     setEditId(id);
@@ -88,17 +88,75 @@ export default function Inventory() {
   return (
     <Box sx={{ bgcolor: "#f4f7f6", minHeight: "100vh", py: 4 }}>
       <Container maxWidth="lg">
-        
-        <Box sx={{ mb: 4, textAlign: 'center' }}>
-          <Typography variant="h4" sx={{ fontWeight: 800, color: "#333", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-            <WarehouseIcon sx={{ fontSize: 40, color: "#43a047" }} />
+
+
+        <Paper elevation={0} sx={{ p: 4, mb: 4, textAlign: 'center', borderRadius: "16px", border: "1px solid #e0e0e0", background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderLeft: "8px solid #1a237e" }}>
+                  <Typography variant="h4" sx={{ fontWeight: 800, color: "#333", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+            <WarehouseIcon sx={{ fontSize: 40, color: "#1976d2" }} />
             Inventory Management
           </Typography>
-          <Typography variant="body1" color="text.secondary">
+                  <Typography variant="body1" color="text.secondary">
             Track real-time stock levels across all warehouse locations
           </Typography>
-        </Box>
+          </Paper>
+          <Grid container spacing={3}>
+                  
+                    <Grid item xs={12} md={7} ml={10}>
+                      <Paper elevation={0} sx={{ p: 3, borderRadius: "12px", border: "1px solid #e0e0e0", height: '100%' }}>
+                        <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold", color: "#3f51b5" }}>Add New Department</Typography>
+                        <form>
+                          <Stack direction="row" spacing={2}>
+                            <FormControl fullWidth size="small">
+                <InputLabel>Select Item</InputLabel>
+                <Select
+                  value={form.itemId}
+                  label="Select Item"
+                  onChange={(e) => setForm({ ...form, itemId: e.target.value })}
+                >
+                  {items.map((i) => <MenuItem key={i.id} value={i.id}>{i.itemName}</MenuItem>)}
+                </Select>
+              </FormControl>
 
+                <TextField
+                fullWidth label="Quantity" type="number" size="small"
+                value={form.quantityAvailable}
+                onChange={(e) => setForm({ ...form, quantityAvailable: e.target.value })}
+              />
+                             <Button 
+                fullWidth variant="contained" 
+                onClick={save}
+                startIcon={editId ? <EditIcon /> : <AddBoxIcon />}
+                sx={{ bgcolor: "#43a047", '&:hover': { bgcolor: "#2e7d32" }, fontWeight: 'bold' }}
+              >
+                {editId ? "UPDATE" : "ADD STOCK"}
+              </Button>
+
+              </Stack>
+            </form>
+          </Paper>
+        </Grid>
+          
+                  
+                    <Grid item xs={12} md={5} ml={10}>
+                      <Paper elevation={0} sx={{ p: 3, borderRadius: "12px", border: "1px solid #e0e0e0", height: '100%' }}>
+                        <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold", color: "#666" }}>Quick Search</Typography>
+                        <Stack direction="row" spacing={1}>
+                         <TextField
+                          fullWidth
+                          placeholder="Search inventory by item name..."
+                          size="small"
+                          variant="outlined"
+                          onChange={(e) => setSearch(e.target.value)}
+                          InputProps={{
+                            startAdornment: <InputAdornment position="start"><SearchIcon color="action" /></InputAdornment>
+                          }}
+                        />
+                        </Stack>
+                      </Paper>
+                    </Grid>
+        </Grid>      
+        
+{/* 
         <Paper elevation={0} sx={{ p: 2, mb: 3, border: "1px solid #e0e0e0", borderRadius: "12px" }}>
             <TextField
                 fullWidth
@@ -112,40 +170,48 @@ export default function Inventory() {
             />
         </Paper>
 
+
+
+        
+
         <Paper elevation={0} sx={{ p: 3, mb: 4, border: "1px solid #e0e0e0", borderRadius: "12px" }}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} sm={3.5}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Select Item</InputLabel>
-                <Select
+          <Typography variant="h6" sx={{ mb: 3, fontWeight: 'bold', color: '#1a237e', display: 'flex', alignItems: 'center', gap: 1 }}>
+            New Stock
+          </Typography>
+          
+          <form >
+            <Grid container spacing={2}>
+              
+              
+              <Grid item xs={12} md={5}>
+                <Typography variant="subtitle2" sx={{ mb: 2, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 1 }}>
+                  Step 1: Select Details
+                </Typography>
+                <Grid spacing={2.5}>
+                  
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Select Product</InputLabel>
+                    <Select
                   value={form.itemId}
                   label="Select Item"
                   onChange={(e) => setForm({ ...form, itemId: e.target.value })}
                 >
                   {items.map((i) => <MenuItem key={i.id} value={i.id}>{i.itemName}</MenuItem>)}
                 </Select>
-              </FormControl>
-            </Grid>
+                  </FormControl>
+                </Grid>
 
-            <Grid item xs={12} sm={2.5}>
-              <TextField
+
+                   <Grid item xs={6} mt={2.5}>
+                    <TextField
                 fullWidth label="Quantity" type="number" size="small"
                 value={form.quantityAvailable}
                 onChange={(e) => setForm({ ...form, quantityAvailable: e.target.value })}
               />
-            </Grid>
+                  </Grid>
 
-            <Grid item xs={12} sm={3.5}>
-              <TextField
-                fullWidth label="Warehouse Location" size="small"
-                value={form.warehouseLocation}
-                placeholder="e.g. Zone A, Rack 4"
-                onChange={(e) => setForm({ ...form, warehouseLocation: e.target.value })}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={2.5}>
-              <Button 
+                  <Grid item xs={12} mt={2}>
+                    <Button 
                 fullWidth variant="contained" 
                 onClick={save}
                 startIcon={editId ? <EditIcon /> : <AddBoxIcon />}
@@ -153,18 +219,24 @@ export default function Inventory() {
               >
                 {editId ? "UPDATE" : "ADD STOCK"}
               </Button>
-            </Grid>
-          </Grid>
-        </Paper>
 
-        <Paper elevation={0} sx={{ borderRadius: "12px", border: "1px solid #e0e0e0", overflow: "hidden" }}>
+                  </Grid>
+
+              </Grid>
+              </Grid>
+
+          </form>
+        </Paper>
+ */}
+
+        <Paper elevation={0} sx={{ borderRadius: "12px", border: "1px solid #e0e0e0", overflow: "hidden" ,mt:10}}>
           <Table>
-            <TableHead sx={{ bgcolor: "#43a047", "& .MuiTableCell-head": { color: "white", fontWeight: "bold", borderRight: "1px solid rgba(255,255,255,0.2)" } }}>
+            <TableHead sx={{ bgcolor: "#e7e5e5", "& .MuiTableCell-head": { color: "Black", fontWeight: "bold", borderRight: "1px solid rgba(255,255,255,0.2)" } }}>
               <TableRow>
                 <TableCell>ID</TableCell>
                 <TableCell>Item Name</TableCell>
                 <TableCell>Stock Level</TableCell>
-                <TableCell>Location</TableCell>
+                {/* <TableCell>Location</TableCell> */}
                 <TableCell align="center">Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -187,12 +259,12 @@ export default function Inventory() {
                             }}
                         />
                     </TableCell>
-                    <TableCell sx={{ borderRight: "1px solid #eee" }}>
+                    {/* <TableCell sx={{ borderRight: "1px solid #eee" }}>
                         <Stack direction="row" spacing={1} alignItems="center">
                             <WarehouseIcon fontSize="inherit" color="action" />
                             <Typography variant="body2">{inv.warehouseLocation}</Typography>
                         </Stack>
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell align="center">
                       <Stack direction="row" spacing={1} justifyContent="center">
                         <IconButton onClick={() => getById(inv.id)} size="small" color="primary"><EditIcon fontSize="small" />Edit </IconButton>

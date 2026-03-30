@@ -42,7 +42,7 @@ export const getDeliveries = () => {
 };
 
 export const submitInvoice = (data) => {
-  return api.post("/api/invoices", data);
+  return api.post("/invoice", data);
 };
 
 export const getVendorRatings = (vendorId) => {

@@ -5,7 +5,7 @@ import api from "../../api/axios";
 import {
   Box, Typography, Drawer, List, ListItemButton, ListItemIcon,
   ListItemText, Card, CardContent, Grid, Button, Divider, 
-  AppBar, Toolbar, Avatar, Container,Stack,Paper 
+  AppBar, Toolbar, Avatar, Container, Stack, Paper 
 } from "@mui/material";
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -13,6 +13,7 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import LogoutIcon from '@mui/icons-material/Logout';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import InventoryIcon from '@mui/icons-material/Inventory'; 
 
 const drawerWidth = 260;
 
@@ -20,6 +21,7 @@ export default function ManagerDashboard() {
   const [requisitions, setRequisitions] = useState([]);
   const [approvals, setApprovals] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [managerName, setManagerName] = useState("Manager"); 
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,6 +32,21 @@ export default function ManagerDashboard() {
   };
 
   useEffect(() => {
+   const fetchProfile = async () => {
+    try {
+      const userId = localStorage.getItem("userId");
+      if (userId) {
+        
+        const res = await api.get(`/users/${userId}`); 
+        setManagerName(res.data.name || res.data.username);
+      }
+    } catch (err) {
+      console.error("Could not fetch profile", err);
+      setManagerName("Manager");
+    }
+  };
+
+  fetchProfile();
     loadDashboard();
   }, []);
 
@@ -61,7 +78,7 @@ export default function ManagerDashboard() {
   return (
     <Box sx={{ display: "flex", bgcolor: "#f4f7f6", minHeight: "100vh" }}>
       
-    
+  
       <AppBar position="fixed" elevation={0} sx={{ 
         zIndex: (theme) => theme.zIndex.drawer + 1,
         bgcolor: "white",
@@ -74,7 +91,7 @@ export default function ManagerDashboard() {
           </Typography>
           <Stack direction="row" spacing={2} alignItems="center">
             <NotificationsIcon color="action" />
-            <Divider orientation="vertical" flexItem />
+            <Divider orientation="vertical" flexItem sx={{ height: 24, my: 'auto' }} />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>Manager Portal</Typography>
             <Avatar sx={{ bgcolor: "#1a237e", width: 32, height: 32 }}>M</Avatar>
           </Stack>
@@ -95,7 +112,7 @@ export default function ManagerDashboard() {
           },
         }}
       >
-        <Toolbar />
+        <Toolbar /> 
         <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '100%' }}>
           <List>
             <Typography variant="overline" sx={{ px: 2, fontWeight: 'bold', color: 'text.secondary' }}>Main Menu</Typography>
@@ -134,19 +151,33 @@ export default function ManagerDashboard() {
       </Drawer>
 
     
-      <Box component="main" sx={{ flexGrow: 1, p: 4 }}>
-        <Toolbar />
+      <Box component="main" sx={{ flexGrow: 1, p: 4, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
+        <Toolbar /> 
+        
         <Container maxWidth="lg">
-          <Box sx={{ mb: 4 }}>
-            <Typography variant="h4" sx={{ fontWeight: 800, color: "#333" }}>
-              Welcome Back
+        
+          <Paper 
+            elevation={0} 
+            sx={{ 
+              p: 4, 
+              mb: 4, 
+              textAlign: 'center', 
+              borderRadius: "16px", 
+              border: "1px solid #e0e0e0",
+              background: "linear-gradient(to right, #ffffff, #f8f9fa)",
+              borderLeft: "8px solid #1a237e" 
+            }}
+          >
+            <Typography variant="h4" sx={{ fontWeight: 800, color: "#1a237e", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+              
+              Welcome Back {managerName}!
             </Typography>
-            <Typography color="text.secondary">
+            <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
               Here is what's happening with your procurement requests today.
             </Typography>
-          </Box>
-
-          
+          </Paper>
+            
+        
           <Grid container spacing={3}>
             <StatCard 
               title="Pending Approvals" 
@@ -168,10 +199,11 @@ export default function ManagerDashboard() {
             />
           </Grid>
 
-          
-          <Paper elevation={0} sx={{ mt: 4, borderRadius: 3, border: "1px solid #e0e0e0", p: 0, overflow: 'hidden' }}>
+        
+          <Box sx={{ mt: 4 }}>
             <Outlet />
-          </Paper>
+          </Box>
+
         </Container>
       </Box>
     </Box>
@@ -183,11 +215,12 @@ function StatCard({ title, count, color, icon }) {
   return (
     <Grid item xs={12} md={4}>
       <Card elevation={0} sx={{ 
-        borderRadius: 3, 
+        borderRadius: 4, 
         borderLeft: `6px solid ${color}`,
         boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        height: '100%'
       }}>
         <CardContent sx={{ p: 3 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">

@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from "react";
+import Home from "../pages/Home";
 import Login from "../pages/Login";
 import EmployeeDashboard from "../pages/employee/EmployeeDashboard";
 import ManagerDashboard from "../pages/manager/ManagerDashboard";
@@ -54,7 +56,7 @@ function AppRouter() {
 
 
 <Route path="/login" element={<Login />} />
-<Route path="/" element={<Login />} />
+<Route path="/" element={<Home />} />
 
 
 <Route path="/employee" element={<EmployeeDashboard />} />

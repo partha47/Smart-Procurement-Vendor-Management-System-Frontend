@@ -138,7 +138,7 @@ export default function Users() {
     <Box sx={{ bgcolor: "#f4f7f6", minHeight: "100vh", py: 4 }}>
       <Container maxWidth="lg">
         
-        
+{/*         
         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 4 }}>
           <Box>
             <Typography variant="h4" sx={{ fontWeight: 800, color: "#333", display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -150,7 +150,34 @@ export default function Users() {
           <Button variant="contained" color="success" startIcon={<PersonAddIcon />} onClick={() => handleOpenForm()} sx={{ borderRadius: 2, px: 3 }}>
             New User
           </Button>
-        </Stack>
+        </Stack> */}
+
+      
+<Paper 
+  elevation={0} 
+  sx={{ 
+    p: 4, 
+    mb: 4, 
+    textAlign: 'center', 
+    display: 'flex', 
+    flexDirection: 'column', 
+    alignItems: 'center',
+    borderRadius: "12px", 
+    border: "1px solid #e0e0e0",
+    background: "linear-gradient(to right, #ffffff, #f8f9fa)", 
+    borderLeft: "6px solid #1565c0" 
+  }}
+>
+  <Typography variant="h4" sx={{ fontWeight: 800, color: "#333", display: 'flex', alignItems: 'center', gap: 2 }}>
+              <GroupIcon sx={{ fontSize: 40, color: "#2e7d32" }} />
+              User Management
+            </Typography>
+            <Typography variant="body1" color="text.secondary">Manage employee access, roles, and departmental assignments</Typography>
+  <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+    Maintain your master inventory list and pricing
+  </Typography>
+  
+</Paper>
 
         <Grid container spacing={3}>
         
@@ -172,7 +199,11 @@ export default function Users() {
                   } catch (err) { showMsg("User not found", "error"); }
                 }}>Search</Button>
                 <Button variant="outlined" onClick={load}><RestartAltIcon /></Button>
+                <Button variant="contained" color="success" startIcon={<PersonAddIcon />} onClick={() => handleOpenForm()} sx={{ borderRadius: 2, px: 3}}>
+            New User
+          </Button>
               </Stack>
+               
             </Paper>
           </Grid>
 

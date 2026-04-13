@@ -45,30 +45,23 @@ export default function TrackStatus() {
     } catch (err) { console.error(err); }
   };
 
-  const track = async () => {
-    if (!id) return;
+  const track = async (trackId) => {
+    const resolvedId = trackId || id;
+    if (!resolvedId) return;
     try {
-    
-      // const approvalRes = await api.get(`/approvals/${id}`);
-      // setApproval(approvalRes.data ? [approvalRes.data] : []);
-
       const approvalRes = await api.get(`/approvals`);
+      const filtered = approvalRes.data.filter(
+        a => a.requisition?.id == resolvedId
+      );
+      setApproval(filtered);
 
-const filtered = approvalRes.data.filter(
-  a => a.requisition?.id == id
-);
-
-setApproval(filtered);
-      console.log("Approval Data:", approvalRes.data);
-
-    
-      const poRes = await api.get(`/po/requisition/${id}`);
+      const poRes = await api.get(`/po/requisition/${resolvedId}`);
       setPo(poRes.data || []);
 
-    
-      const delRes = await api.get(`/api/deliveries/requisition/${id}`);
+      const delRes = await api.get(`/api/deliveries/requisition/${resolvedId}`);
       setDelivery(delRes.data || []);
-    } catch {
+    } catch (err) {
+      console.error("Track error:", err);
       setApproval([]); setPo([]); setDelivery([]);
     }
   };
@@ -142,7 +135,7 @@ const menuItems = [
                           }} />
                         </TableCell>
                         <TableCell align="right">
-                          <Button size="small" variant="outlined" onClick={() => { setId(r.id); track(); }}>TRACK</Button>
+                          <Button size="small" variant="outlined" onClick={() => { setId(r.id); track(r.id); }}>TRACK</Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -157,7 +150,7 @@ const menuItems = [
                 <Stack direction="row" spacing={1}>
                   <TextField fullWidth size="small" placeholder="Enter ID to track..." value={id} onChange={(e) => setId(e.target.value)}
                     InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment> }} />
-                  <Button variant="contained" onClick={track} sx={{ bgcolor: "#1976d2" }}>TRACK</Button>
+                  <Button variant="contained" onClick={() => track()} sx={{ bgcolor: "#1976d2" }}>TRACK</Button>
                 </Stack>
               </Paper>
 

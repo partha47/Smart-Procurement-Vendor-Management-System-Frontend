@@ -146,7 +146,7 @@ export default function Inventory() {
                           placeholder="Search inventory by item name..."
                           size="small"
                           variant="outlined"
-                          onChange={(e) => setSearch(e.target.value)}
+                          value={search} onChange={(e) => setSearch(e.target.value)}
                           InputProps={{
                             startAdornment: <InputAdornment position="start"><SearchIcon color="action" /></InputAdornment>
                           }}
@@ -163,7 +163,7 @@ export default function Inventory() {
                 placeholder="Search inventory by item name..."
                 size="small"
                 variant="outlined"
-                onChange={(e) => setSearch(e.target.value)}
+                value={search} onChange={(e) => setSearch(e.target.value)}
                 InputProps={{
                     startAdornment: <InputAdornment position="start"><SearchIcon color="action" /></InputAdornment>
                 }}

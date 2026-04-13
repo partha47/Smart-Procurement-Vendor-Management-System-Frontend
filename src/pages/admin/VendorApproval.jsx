@@ -49,9 +49,14 @@ export default function VendorApproval() {
 
   const deleteVendor = async (id) => {
     if (window.confirm("Are you sure you want to remove this vendor?")) {
-      await API.delete(`/vendors/${id}`);
-      showMsg("Vendor deleted");
-      loadVendors();
+      try {
+        await API.delete(`/vendors/${id}`);
+        showMsg("Vendor deleted successfully");
+        loadVendors();
+      } catch (err) {
+        console.error("Delete failed:", err);
+        showMsg("Delete failed — vendor may have linked records", "error");
+      }
     }
   };
 
